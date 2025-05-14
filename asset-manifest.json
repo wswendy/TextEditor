@@ -1,10 +1,13 @@
 {
   "files": {
-    "main.js": "/TextEditor/static/js/main.20edd91d.js",
+    "main.css": "/TextEditor/static/css/main.faa59a4a.css",
+    "main.js": "/TextEditor/static/js/main.f4de5a9a.js",
     "index.html": "/TextEditor/index.html",
-    "main.20edd91d.js.map": "/TextEditor/static/js/main.20edd91d.js.map"
+    "main.faa59a4a.css.map": "/TextEditor/static/css/main.faa59a4a.css.map",
+    "main.f4de5a9a.js.map": "/TextEditor/static/js/main.f4de5a9a.js.map"
   },
   "entrypoints": [
-    "static/js/main.20edd91d.js"
+    "static/css/main.faa59a4a.css",
+    "static/js/main.f4de5a9a.js"
   ]
 }
