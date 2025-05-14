@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/TextEditor/static/js/main.808566f6.js",
+    "index.html": "/TextEditor/index.html",
+    "main.808566f6.js.map": "/TextEditor/static/js/main.808566f6.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.808566f6.js"
+  ]
+}
