@@ -1,22 +1,36 @@
 import React, { useState } from "react";
-
+import "./App.css";
 const initialLines = [
-  { text: "", tag: "p", bold: false, italic: false, color: "", link: "" },
+  {
+    text: "",
+    tag: "paragraph",
+    bold: false,
+    italic: false,
+    color: "",
+    link: "",
+  },
 ];
 
 export default function App() {
   const [lines, setLines] = useState(initialLines);
   const [htmlOutput, setHtmlOutput] = useState("");
   const [copySuccess, setCopySuccess] = useState("");
+  const [selectedTag, setSelectedTag] = useState("paragraph");
+  const [isHTMLHidden, setIsHTMLHidden] = useState(true);
 
   const generateHtml = (data) => {
-    // 將每個 block 以兩個換行分隔，方便原始碼閱讀與結構分段
     const html = data
       .map((line) => {
         if (line.tag === "img") {
           return line.url
-            ? `<img src="${line.url}" alt="${line.alt || ""}" />`
+            ? `<div class="media-box"><img src="${line.url}" alt="${
+                line.alt || ""
+              }"/></div>`
             : "";
+        }
+
+        if (line.tag === "spacer") {
+          return `<div style="height: 24px;"></div>`;
         }
 
         let content = line.text;
@@ -46,9 +60,13 @@ export default function App() {
           const items = content
             .split("\n")
             .filter((i) => i.trim())
-            .map((i) => `<li>${i}</li>`)
-            .join("");
-          return `<${line.tag}>${items}</${line.tag}>`;
+            .map((i) => `<li>${i}</li>`);
+
+          if (items.length === 0) return "";
+
+          return `<${line.tag} class="paragraph">${items.join("")}</${
+            line.tag
+          }>`;
         }
 
         const paragraphs = content
@@ -56,10 +74,25 @@ export default function App() {
           .filter((p) => p.trim())
           .join("<br>");
 
+        if (!paragraphs.trim()) return "";
+        const renderers = {
+          "tips-box": (p) =>
+            `<div class="tips-box"><p class="paragraph">${p}</p></div>`,
+          "info-box": (p) =>
+            `<div class="info-box"><p class="paragraph">${p}</p></div>`,
+          blockquote: (p) => `<div class="blockquote"><p>${p}</p></div>`,
+          paragraph: (p) => `<p class="paragraph">${p}</p>`,
+          h1: (p) => `<h1 class="h1-style">${p}</h1>`,
+          h2: (p) => `<h2 class="h2-style">${p}</h2>`,
+        };
+
+        if (renderers[line.tag]) {
+          return renderers[line.tag](paragraphs);
+        }
+
         return `<${line.tag}>${paragraphs}</${line.tag}>`;
       })
-      .join("\n\n"); // 兩個換行分隔每段
-
+      .join("\n\n");
     setHtmlOutput(html);
   };
 
@@ -85,22 +118,33 @@ export default function App() {
     generateHtml(updated);
   };
 
-  const addLine = () => {
-    const updated = [
-      ...lines,
-      { text: "", tag: "p", bold: false, italic: false, color: "", link: "" },
-    ];
-    setLines(updated);
-    generateHtml(updated);
-  };
-
-  const addImageLine = () => {
+  const addImage = () => {
     const updated = [...lines, { text: "", tag: "img", url: "", alt: "" }];
     setLines(updated);
     generateHtml(updated);
   };
 
-  const getHtml = () => generateHtml(lines);
+  const addSpacer = () => {
+    const updated = [...lines, { text: "", tag: "spacer", url: "", alt: "" }];
+    setLines(updated);
+    generateHtml(updated);
+  };
+
+  const addParagraphs = (tag) => {
+    const updated = [
+      ...lines,
+      {
+        text: "",
+        tag: tag,
+        bold: false,
+        italic: false,
+        color: "",
+        link: "",
+      },
+    ];
+    setLines(updated);
+    generateHtml(updated);
+  };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(htmlOutput).then(
@@ -120,24 +164,42 @@ export default function App() {
           marginBottom: 20,
         }}
       >
-        <strong>範例：</strong>
-        <br />
-        <code>我想去[Google|_blank](https://google.com)</code> →
-        開新分頁的超連結
-        <br />
-        <code>**粗體** *斜體* __底線__</code> → 片段樣式語法
-        <br />
-        <code>{"{紅字}"}(#f00)</code> → 設定指定文字顏色
-        <br />
-        <code>我想去[Google](https://google.com)</code> → 自動轉換成超連結
-        <br />
-        換行使用 <code>Enter</code> 或 <code>\n</code>，在非清單中會變成{" "}
-        <code>&lt;br&gt;</code>
-        <br />
-        <code>UL/OL</code> 清單請直接輸入多行內容，每行會變成一個{" "}
-        <code>&lt;li&gt;</code>
+        <div>
+          <p>
+            This is our <a href="https://akohub.com">website link</a>
+          </p>
+          <p>
+            Open in a new tab:{" "}
+            <code class="code">
+              This is our [website link|_blank](https://akohub.com)
+            </code>
+          </p>
+          <p>
+            Open in the same tab:{" "}
+            <code class="code">
+              This is our [website link](https://akohub.com)
+            </code>
+          </p>
+        </div>
+        <hr />
+        <div>
+          <p>
+            <b>Bold text</b>: <code class="code">**Bold text**</code>
+          </p>
+          <p>
+            <i>Italic</i>: <code class="code">*Italic text*</code>
+          </p>
+          <p>
+            <span style={{ textDecoration: "underline" }}>Underline</span>:{" "}
+            <code class="code">__Underline text__</code>
+          </p>
+          <p>
+            <span style={{ color: "#f00" }}>Text color</span>:{" "}
+            <code class="code">{"{Text color}"}(#f00)</code>
+          </p>
+        </div>
       </div>
-      <h2>簡易 HTML 編輯器（逐行輸入）</h2>
+      <h2>Element Input</h2>
       {lines.map((line, index) => (
         <div
           key={index}
@@ -148,97 +210,146 @@ export default function App() {
             marginBottom: 8,
           }}
         >
-          {line.tag === "img" ? (
-            <>
-              <input
-                style={{ width: 180 }}
-                placeholder="圖片 URL"
-                value={line.url}
-                onChange={(e) => updateLine(index, "url", e.target.value)}
-              />
-              <input
-                placeholder="替代文字"
-                value={line.alt}
-                onChange={(e) => updateLine(index, "alt", e.target.value)}
-              />
-            </>
-          ) : (
-            <>
-              <textarea
-                style={{ flex: 1, minHeight: 60 }}
-                placeholder="輸入文字內容，可用 \n 分段"
-                value={line.text}
-                onChange={(e) => updateLine(index, "text", e.target.value)}
-              />
-              <select
-                value={line.tag}
-                onChange={(e) => updateLine(index, "tag", e.target.value)}
-              >
-                <option value="p">段落</option>
-                <option value="h1">H1</option>
-                <option value="h2">H2</option>
-                <option value="h3">H3</option>
-                <option value="h4">H4</option>
-                <option value="h5">H5</option>
-                <option value="h6">H6</option>
-                <option value="ul">UL 清單</option>
-                <option value="ol">OL 清單</option>
-              </select>
-            </>
-          )}
+          {(() => {
+            switch (line.tag) {
+              case "img":
+                return (
+                  <>
+                    <input
+                      style={{ width: 180 }}
+                      placeholder="image url"
+                      value={line.url}
+                      onChange={(e) => updateLine(index, "url", e.target.value)}
+                    />
+                    <input
+                      placeholder="image alt"
+                      value={line.alt}
+                      onChange={(e) => updateLine(index, "alt", e.target.value)}
+                    />
+                  </>
+                );
+
+              case "h1":
+              case "h2":
+                return (
+                  <input
+                    style={{ flex: 1 }}
+                    placeholder="Enter your text here"
+                    value={line.text}
+                    onChange={(e) => updateLine(index, "text", e.target.value)}
+                  />
+                );
+
+              case "spacer":
+                return <div>It's a spacer</div>;
+
+              default:
+                return (
+                  <textarea
+                    style={{ flex: 1, minHeight: 60 }}
+                    placeholder="Enter your text here"
+                    value={line.text}
+                    onChange={(e) => updateLine(index, "text", e.target.value)}
+                  />
+                );
+            }
+          })()}
 
           <button
             onClick={() => moveLine(index, index - 1)}
             disabled={index === 0}
           >
-            ↑
+            ↑ Move up
           </button>
           <button
             onClick={() => moveLine(index, index + 1)}
             disabled={index === lines.length - 1}
           >
-            ↓
+            ↓ Move down
           </button>
           <button onClick={() => deleteLine(index)}>🗑</button>
         </div>
       ))}
 
       <div style={{ marginTop: 12 }}>
-        <button onClick={addLine}>+ 新增文字行</button>
-        <button onClick={addImageLine} style={{ marginLeft: 8 }}>
-          + 新增圖片行
-        </button>
-        <button onClick={getHtml} style={{ marginLeft: 8 }}>
-          輸出 HTML
-        </button>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            marginTop: 16,
+          }}
+        >
+          <select
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+          >
+            <option value="h1">H1</option>
+            <option value="h2">H2</option>
+            <option value="paragraph">Paragraph</option>
+            <option value="ul">UL list</option>
+            <option value="ol">OL list</option>
+            <option value="img">Image</option>
+            <option value="info-box">Info Box</option>
+            <option value="tips-box">Tips Box</option>
+            <option value="blockquote">Blockquote</option>
+            <option value="spacer">Spacer</option>
+          </select>
+
+          <button
+            onClick={() => {
+              if (selectedTag === "img") {
+                addImage();
+              } else if (selectedTag === "spacer") {
+                addSpacer();
+              } else {
+                addParagraphs(selectedTag);
+              }
+            }}
+          >
+            ＋ Add
+          </button>
+        </div>
       </div>
 
       <div style={{ marginTop: 20 }}>
-        <h3>預覽：</h3>
+        <h3>Preview：</h3>
         <div
           style={{
             padding: 10,
             border: "1px solid #ccc",
-            background: "#fafafa",
+            background: "#fff",
           }}
           dangerouslySetInnerHTML={{ __html: htmlOutput }}
         />
-        <h3>HTML 原始碼：</h3>
+        <div>
+          <h3>HTML Output</h3>
+          <label>
+            <input
+              type="checkbox"
+              checked={isHTMLHidden}
+              onChange={(e) => setIsHTMLHidden(e.target.checked)}
+            />
+            Hide source code
+          </label>
+        </div>
         <button onClick={copyToClipboard} style={{ marginBottom: 8 }}>
-          複製原始碼
+          Copy HTML Code
         </button>
         <span>{copySuccess}</span>
-        <textarea
-          style={{
-            width: "100%",
-            minHeight: 200,
-            background: "#f5f5f5",
-            padding: 10,
-            whiteSpace: "pre-wrap",
-          }}
-          readOnly
-          value={htmlOutput}
-        />
+        {!isHTMLHidden && (
+          <textarea
+            style={{
+              width: "100%",
+              minHeight: 200,
+              background: "#f5f5f5",
+              padding: 10,
+              whiteSpace: "pre-wrap",
+            }}
+            readOnly
+            value={htmlOutput}
+          />
+        )}
       </div>
     </div>
   );

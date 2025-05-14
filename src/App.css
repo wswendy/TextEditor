@@ -1,1 +1,246 @@
-body { font-family: sans-serif; }
+body {
+  font-family: sans-serif;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  margin: 20px;
+  background-color: #ffffff;
+  color: #333;
+}
+
+/* Removed .component-container styles */
+/* Removed .component-container h2 styles */
+
+/* Add spacing for direct children in component library preview page */
+.component-library-preview > * {
+  margin-bottom: 30px;
+  /* Add some space between components in the library view */
+}
+
+/* Reset margin for the last child to avoid extra space at the bottom */
+.component-library-preview > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Text Styles based on Figma */
+.h1-style {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  /* Desktop font size */
+  line-height: 1.2;
+  color: #1a202c;
+}
+
+@media (max-width: 768px) {
+  /* Assuming 768px as a common breakpoint for mobile */
+  .h1-style {
+    font-size: 28px;
+    /* Mobile font size */
+    line-height: 1.3;
+  }
+}
+
+.h2-style {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #1a202c;
+  /* Removed margin/border reverts as they are handled by contextual styles now */
+}
+
+.paragraph {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #2d3748;
+}
+
+/* Placeholder for other components - will be styled later */
+.info-box,
+.tips-box,
+.blockquote {
+  padding: 15px;
+  border: 1px dashed #ccc;
+}
+
+/* Component Styles based on Figma */
+
+.info-box {
+  background-color: #f7fafc;
+  padding: 16px 24px;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  /* Overriding placeholder if any */
+}
+
+.tips-box {
+  background-color: #eef8f6;
+  padding: 16px 24px;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  border: none;
+  /* Overriding placeholder if any */
+}
+
+.media-box {
+  padding-bottom: 24px;
+  border: none;
+  /* Overriding placeholder if any */
+}
+
+.media-box img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  /* 16:9 比例 */
+  height: 0;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.blockquote {
+  border: none;
+  /* Overriding placeholder if any */
+  border-left: 1px solid #0e4453;
+  padding-left: 24px;
+  padding-bottom: 24px;
+  margin-left: 0;
+  /* Resetting default blockquote margin */
+  margin-right: 0;
+  /* Resetting default blockquote margin */
+  width: 760px;
+}
+
+.blockquote p {
+  font-family: "Inter", sans-serif;
+  /* Explicitly set, though body inherits */
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #185b65;
+  margin: 0;
+  /* Resetting default p margin if any */
+}
+
+/* Added for article preview container and contextual spacing */
+.faq-article-column-container {
+  max-width: 840px;
+  margin: 40px auto;
+  /* Centering with top/bottom margin for standalone preview */
+  background-color: #fff;
+  /* Assuming article content area is white as in Figma */
+  padding: 1px 0;
+  /* Minimal vertical padding to contain child margins, no horizontal padding by default */
+}
+
+/* Contextual Spacing for components within the article column */
+/* Based on Figma node 5865:35275 'FAQ article' structure's left content column */
+
+/* Info Box (Figma Frame 'Info' 6135:21848 uses layout_Z685PZ with padding: 24px 0px) */
+.faq-article-column-container > .info-box {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+/* H1 Title (Figma Frame 'Heading H1' 5865:36026 for "Before you start" uses layout_D0C77T with padding: 48px 0px 16px) */
+.faq-article-column-container > .h1-style {
+  /* Changed from .h1-desktop */
+  margin-top: 48px;
+  margin-bottom: 16px;
+}
+
+/* Tips Box Card (Figma Frame 'Card' 5865:35911 for tips uses layout_Z685PZ with padding: 24px 0px) */
+.faq-article-column-container > .tips-box {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+/* Media (Video/Image) */
+/* Figma Frame 'Media' 5865:35896 for video uses layout_8ABPWJ with padding: 0px 0px 24px */
+/* Figma Frame 'Media' 5865:36014 for image171 uses layout_NT39W8 with padding: 0px 0px 24px */
+.faq-article-column-container > .media-box {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+/* H2 Title (Figma Frame 'Heading H2' 5865:36015 for "2.1..." uses layout_FB9V3L with padding: 40px 0px 16px) */
+.faq-article-column-container > .h2-style {
+  /* Changed from .h2-desktop */
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+/* Specific styling for paragraphs within tips-box to reduce excessive spacing */
+.tips-box > .paragraph {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tips-box > .paragraph:first-child {
+  margin-top: 0;
+}
+
+.tips-box > .paragraph:last-child {
+  margin-bottom: 0;
+}
+
+/* Styling for ordered list within tips-box */
+.tips-box > .list-in-tips-box {
+  list-style-type: decimal;
+  /* Ensure it's numbered */
+  margin-top: 0.5em;
+  /* Space above the list, below the intro paragraph */
+  margin-bottom: 0;
+  /* No extra space at the bottom of the list itself */
+  padding-left: 20px;
+  /* Indentation for the numbers; adjust as needed */
+}
+
+.tips-box > .list-in-tips-box > li {
+  font-family: "Inter", sans-serif;
+  /* Match .paragraph style */
+  font-weight: 400;
+  /* Match .paragraph style */
+  font-size: 16px;
+  /* Match .paragraph style */
+  line-height: 1.5;
+  /* Match .paragraph style */
+  color: #2d3748;
+  /* Match .paragraph style */
+  margin-bottom: 0.25em;
+  /* Small space between list items for readability */
+}
+
+.tips-box > .list-in-tips-box > li:last-child {
+  margin-bottom: 0;
+  /* No extra space after the last list item */
+}
+
+/* Code */
+code.code {
+  background-color: #f5f5f5;
+  font-family: monospace;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.95em;
+  color: #333;
+}
