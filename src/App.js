@@ -112,6 +112,31 @@ export default function App() {
 
   return (
     <div style={{ padding: 20 }}>
+      <div
+        style={{
+          background: "#eef",
+          padding: 10,
+          borderRadius: 6,
+          marginBottom: 20,
+        }}
+      >
+        <strong>範例：</strong>
+        <br />
+        <code>我想去[Google|_blank](https://google.com)</code> →
+        開新分頁的超連結
+        <br />
+        <code>**粗體** *斜體* __底線__</code> → 片段樣式語法
+        <br />
+        <code>{"{紅字}"}(#f00)</code> → 設定指定文字顏色
+        <br />
+        <code>我想去[Google](https://google.com)</code> → 自動轉換成超連結
+        <br />
+        換行使用 <code>Enter</code> 或 <code>\n</code>，在非清單中會變成{" "}
+        <code>&lt;br&gt;</code>
+        <br />
+        <code>UL/OL</code> 清單請直接輸入多行內容，每行會變成一個{" "}
+        <code>&lt;li&gt;</code>
+      </div>
       <h2>簡易 HTML 編輯器（逐行輸入）</h2>
       {lines.map((line, index) => (
         <div
